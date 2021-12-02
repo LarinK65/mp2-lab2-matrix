@@ -7,25 +7,79 @@
 
 #include <iostream>
 #include "utmatrix.h"
+#include <cstddef>
 //---------------------------------------------------------------------------
 
-void main()
+int main()
 {
-  TMatrix<int> a(5), b(5), c(5);
-  int i, j;
+	std::ios::sync_with_stdio(false);
 
-  setlocale(LC_ALL, "Russian");
-  cout << "Тестирование программ поддержки представления треугольных матриц"
-    << endl;
-  for (i = 0; i < 5; i++)
-    for (j = i; j < 5; j++ )
-    {
-      a[i][j] =  i * 10 + j;
-      b[i][j] = (i * 10 + j) * 100;
-    }
-  c = a + b;
-  cout << "Matrix a = " << endl << a << endl;
-  cout << "Matrix b = " << endl << b << endl;
-  cout << "Matrix c = a + b" << endl << c << endl;
+	std::cout << "enter size of matrixs: ";
+	std::cout.flush();
+
+	std::size_t size;
+	std::cin >> size;
+
+	TMatrix<int> a(size), b(size);
+
+	std::cout << "enter first matrix with lower null elements" << std::endl;
+	for (std::size_t i = 0; i < size; i++)
+	{
+		for (std::size_t j = 0; j < i; j++)
+		{
+			std::cin >> a[i][i];
+		}
+		for (std::size_t j = i; j < size; j++)
+		{
+			std::cin >> a[i][j];
+		}
+	}
+
+	std::cout << "enter second matrix with lower null elements" << std::endl;
+	for (std::size_t i = 0; i < size; i++)
+	{
+		for (std::size_t j = 0; j < i; j++)
+		{
+			std::cin >> b[i][i];
+		}
+		for (std::size_t j = i; j < size; j++)
+		{
+			std::cin >> b[i][j];
+		}
+	}
+
+	std::cout << "enter operation \'+\' or \'-\'";
+	std::cout.flush();
+
+	char op;
+	cin >> op;
+
+#pragma warning(disable:26493)
+
+	auto tmp = (op == '+' ? a + b : (op == '-' ? a - b : *(decltype(a - b)*)0));
+
+	if (op == '+') {
+		std::cout << "A + B = {" << std::endl;
+	}
+	else {
+		std::cout << "A - B = {" << std::endl;
+	}
+
+	for (std::size_t i = 0; i < size; i++)
+	{
+		for (std::size_t j = 0; j < i; j++)
+		{
+			cout << "0 ";
+		}
+		for (std::size_t j = i; j < size; j++)
+		{
+			std::cout << tmp[i][j] << ' ';
+		}
+		std::cout << '\n';
+	}
+
+	std::cout << '}' << std::endl;
+
+	return 0;
 }
 //---------------------------------------------------------------------------
